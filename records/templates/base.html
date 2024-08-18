@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>ForkPi</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/static/bootstrap/css/bootstrap.min.css" media="screen">
+	<link rel="stylesheet" href="/static/base.css" media="screen">
+	<link rel="stylesheet" href="/static/jquery/tablesorter/tablesorter.theme.css" media="screen">
+	<link rel="stylesheet" href="/static/jquery/tokeninput/token-input-facebook.css" media="screen">
+
+	<script src="/static/jquery/jquery-2.1.0.min.js"></script>
+	<script src="/static/base.js"></script>
+	<script src="/static/bootstrap/js/bootstrap.min.js"></script>	
+	<script src="/static/jquery/tablesorter/jquery.tablesorter.js"></script>
+	<script src="/static/jquery/tablesorter/jquery.tablesorter.widgets.js"></script>
+	<script src="/static/jquery/tokeninput/jquery.tokeninput.js"></script>
+</head>
+
+<body>
+	<nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
+		<!-- For normal required textboxes-->
+		<div class="required-invisible-container invisible">
+			<div class="required-icon"><div class="text">*</div></div>
+		</div>
+		<!-- For special RFID/Fingerprint required textboxes-->
+		<div class="required-invisible-container-rfid-fingerprint invisible">
+			<div class="required-icon-rfid-fingerprint"><div class="text">*</div></div>
+		</div>
+		<div class="container-fluid">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false" aria-controls="navbar">
+		        	<span class="sr-only">Toggle navigation</span>
+			        <span class="icon-bar"></span>
+			        <span class="icon-bar"></span>
+			        <span class="icon-bar"></span>
+		      	</button>
+				<a class="navbar-brand" href={% url 'index' %}>ForkPi</a>
+			</div>
+
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav">
+					<li><p class="navbar-text">{{ loginText }}</p></li>
+				</ul>
+
+				<ul class="nav navbar-nav navbar-right">
+					{% for action in userActions %}
+						<li><a href="{{ action.url }}">{{ action.name }}</a></li>
+					{% endfor %}
+				</ul>
+			</div><!-- /.navbar-collapse -->
+		</div><!-- /.container-fluid -->
+	</nav>
+	
+	<br/><br/><br/>
+	<div class="container">
+		{% if messages %}
+		<div class="row">
+			<div class="col-md-8 col-md-offset-2">
+				{% for message in messages %}
+					<div class="row">
+						<div class="alert alert-{% if message.tags %}{{ message.tags }}{% endif %}">
+							{{ message }}
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+		{% endif %}
+		<div class="row">
+			<div class="col-md-12">
+				{% block content %}
+				{% endblock %}
+				<br/>
+			</div>
+		</div>
+	</div>
+	<br/>
+</body>
+</html>

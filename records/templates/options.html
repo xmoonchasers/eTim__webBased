@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block content%}
+<div class="row">
+	<div class="col-md-12">
+		<div class="row">
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h3 class="panel-title">Options</b></h3>
+					<div class="pull-right">
+					</div>
+				</div>
+				<table id="options-table" class="table table-hover tablesorter" data-sortList="[[0,0]]">
+					<thead>
+						<tr>
+							<th class="col-md-4" data-placeholder="Search...">Name</th>
+							<th class="col-md-7" data-placeholder="Search...">Description</th>
+							<th class="col-md-2" data-placeholder="Search...">Current Value</th>
+							<th class="col-md-2" data-placeholder="Search...">Default Value</th>
+						</tr>
+					</thead>
+					<tbody>
+					{% csrf_token %}
+						{% if options|length > 0 %}
+							{% for option in options %}
+							<tr>
+								<td>
+									{{ option.flavor_text }}
+								</td>
+								<td>
+									{{ option.description }}
+								</td>
+								<td data-post-url={% url 'edit option value' %} data-id="{{ option.id }}" data-field="name">
+									<span class="editable-text">
+									{{ option.value }}
+									</span>
+								</td>
+								<td>
+									{{ option.default }}
+									</span>
+								</td>
+							</tr>
+							{% endfor %}
+						{% else %}
+							<tr>
+								<td colspan="5" style="text-align:center">No options found.</td>
+							</tr>
+						{% endif %}
+					</tbody>
+				</table>
+			</div>
+
+
+			<a class="btn btn-success" id="regenerate-key-btn" href="{% url 'regenerate secret key' %}">
+				Regenerate secret key (you will be logged out)
+			</a>
+
+		</div>
+	</div>
+</div>
+{% endblock %}

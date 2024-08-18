@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block content%}
+
+<ul class="nav nav-tabs">
+	<li class="active"><a href="#view-logs" data-toggle="tab">View Logs</a></li>
+	<li><a href="#delete-logs" data-toggle="tab">Delete Logs</a></li>
+	<li><a href="#" class="export-as-csv">Export as CSV</a></li>
+</ul>
+
+<!--ul id="tabs" class="nav nav-pills nav-justified" data-tabs="tabs">
+    <li class="active"><a href="#view-logs" data-toggle="tab">View Logs</a></li>
+    <li><a href="#delete-logs" data-toggle="tab">Delete Logs</a></li>
+</ul-->
+<div class="tab-content">
+	<div class="tab-pane active" id="view-logs">
+		<table id="logs-table" class="table table-hover tablesorter" data-sortList="[[0,0]]">
+			<thead>
+				<tr>
+					<th class="col-md-2" data-placeholder="Search...">
+						#
+					</th>
+					<th class="col-md-5" data-placeholder="Search...">
+						Date
+					</th>
+					<th class="col-md-4" data-placeholder="Search...">
+						Door
+					</th>
+					<th class="col-md-3" data-placeholder="Search...">
+						Action
+					</th>
+					<th class="col-md-5" data-placeholder="Search...">
+						Details
+					</th>
+					<th class="col-md-3 non-csv" data-placeholder="Search...">
+						PIN
+					</th>
+					<th class="col-md-3 non-csv" data-placeholder="Search...">
+						RFID UID
+					</th>
+					<th class="col-md-3 non-csv" data-placeholder="Search...">
+						Fingerprint
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for log in logs %}
+					<tr class="
+						{% if log.action == 'Denied' %}
+							redded
+						{% endif %}
+					">
+						<td>{{ forloop.counter }}</td>
+						<td>{{ log.created_on | date:"Y-m-d H:i:s" }}</td>
+						<td>{{ log.door.name }}
+						<td>
+							{% if log.was_allowed %}
+								Allowed
+							{% else %}
+								Denied
+							{% endif %}
+						</td>
+						<td>{{ log.details }}</td>
+						<td class="non-csv">{{ log.pin }}</td>
+						<td class="non-csv">{{ log.rfid_uid }}</td>
+						<td class="non-csv">
+							{% if log.used_fingerprint %}
+								Yes
+							{% else %}
+								
+							{% endif %}
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	<div class="tab-pane" id="delete-logs">
+		<br/><br/>
+		<form class="form-horizontal" method="post" action="{% url 'delete logs' %}">
+			<div class="form-group" style="line-height:50px">
+				<label for="days" class="col-md-3 col-md-offset-2" style="text-align:right; vertical-align:middle;">Delete logs older than</label>
+				<div class="col-md-1">
+					<input type="text" class="form-control input-lg" id="days" name="days" value="30" autofocus/>
+				</div>
+				<label for="days" class="col-md-1" style="text-align:left; vertical-align:middle;">days</label>
+				<div class="col-md-2">
+					<button type="submit" class="btn btn-primary expand input-lg">Delete</button>
+				</div>
+			</div>
+			{% csrf_token %}
+		</form>
+	</div>
+
+	<div id="hidden-table-container" style="display:none"> <!-- invisible does not work with the CSV. -->
+	</div>
+
+	<!-- <input class="export-as-csv" value="Export as CSV" type="button" /> -->
+</div>
+{% endblock %}
